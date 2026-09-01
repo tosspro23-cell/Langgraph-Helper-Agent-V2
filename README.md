@@ -247,6 +247,19 @@ Gemini and OpenRouter are hosted APIs, so they need internet even in
 document retrieval, not the LLM call). For a setup with **zero** network
 dependency end-to-end, use `LLM_PROVIDER=ollama` with `--mode offline`.
 
+### A note on Gemini free-tier rate limits
+
+`GEMINI_MODEL` defaults to `gemini-3.5-flash-lite`. "-lite" models get the
+most generous free-tier request quota; brand-new/preview models (including
+`-latest` aliases, which can silently start pointing at a preview model)
+have much stricter limits — as low as **20 requests/day** was observed on
+a preview flash model during development. If you see a `429
+RESOURCE_EXHAUSTED` error, wait for the quota to reset (daily quotas reset
+at midnight Pacific time) or switch to another model/provider — no code
+changes needed, just edit `GEMINI_MODEL` (or `LLM_PROVIDER`) in `.env`.
+This is expected behavior on a free tier, not a bug; the agent surfaces
+the error message and exits cleanly rather than hanging or crashing.
+
 ---
 
 ## Choosing a web search backend (online mode)
