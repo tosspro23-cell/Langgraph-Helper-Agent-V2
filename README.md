@@ -1,5 +1,7 @@
 # LangGraph Helper Agent
 
+[![Tests](https://github.com/tosspro23-cell/Langgraph-Helper-Agent-V2/actions/workflows/tests.yml/badge.svg)](https://github.com/tosspro23-cell/Langgraph-Helper-Agent-V2/actions/workflows/tests.yml)
+
 An AI agent, built with **LangGraph** and **LangChain (v1)**, that answers
 practical developer questions about LangGraph and LangChain. It supports
 two operating modes — **offline** (a locally pre-built index of the
