@@ -54,6 +54,26 @@ def retrieve_online(state: AgentState) -> dict:
         }
 
 
+def _extract_text(content) -> str:
+    """Normalize a LangChain message's .content into plain text.
+
+    Most chat models return a plain string. Some (e.g. newer Gemini models)
+    return a list of content blocks (text, thought signatures, etc.) --
+    concatenate just the text blocks in that case.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict) and block.get("type") == "text":
+                parts.append(block.get("text", ""))
+        return "".join(parts)
+    return str(content)
+
+
 def generate_answer(state: AgentState) -> dict:
     llm = get_llm()
     context = format_context(state.get("context_chunks", []))
@@ -63,4 +83,4 @@ def generate_answer(state: AgentState) -> dict:
     ]
     response = llm.invoke(messages)
     sources = [c["url"] for c in state.get("context_chunks", []) if c.get("url")]
-    return {"answer": response.content, "sources": sources}
+    return {"answer": _extract_text(response.content), "sources": sources}

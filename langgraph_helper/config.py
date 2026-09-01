@@ -26,7 +26,7 @@ class Settings:
     llm_provider: str = os.getenv("LLM_PROVIDER", "gemini")
 
     google_api_key: str | None = os.getenv("GOOGLE_API_KEY")
-    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+    gemini_model: str = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 
     openrouter_api_key: str | None = os.getenv("OPENROUTER_API_KEY")
     openrouter_model: str = os.getenv(
