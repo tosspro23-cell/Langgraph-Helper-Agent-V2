@@ -19,9 +19,27 @@ from ..state import SourceChunk
 
 _TOKEN_RE = re.compile(r"[a-z0-9_]+")
 
+# Minimal stopword list: high-frequency English function words that carry
+# no topical signal but, left in, dilute BM25's term weighting -- along
+# with single-character tokens, which are mostly split-off possessive "s"
+# (from "What's", "It's", ...) or code-identifier noise, not real words.
+# Both were observed empirically to distort rankings on short queries: see
+# the "What's the difference between StateGraph and MessageGraph?" case in
+# tests/test_offline_retriever.py, which regressed without this filter.
+_STOPWORDS = {
+    "a", "an", "the", "and", "or", "but", "is", "are", "was", "were", "be",
+    "been", "being", "to", "of", "in", "on", "for", "with", "as", "by",
+    "at", "from", "this", "that", "these", "those", "it", "its", "what",
+    "which", "who", "how", "do", "does", "did", "i", "you", "we", "they",
+}
+
 
 def _tokenize(text: str) -> list[str]:
-    return _TOKEN_RE.findall(text.lower())
+    return [
+        t
+        for t in _TOKEN_RE.findall(text.lower())
+        if len(t) > 1 and t not in _STOPWORDS
+    ]
 
 
 @lru_cache(maxsize=1)

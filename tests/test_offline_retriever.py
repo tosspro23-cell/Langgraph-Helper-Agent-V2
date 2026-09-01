@@ -24,3 +24,18 @@ def test_relevant_chunk_is_retrieved_for_known_topic():
     results = offline.search("add memory persistence checkpointer LangGraph", k=5)
     urls = [c["url"] for c in results]
     assert any("add-memory" in u or "persistence" in u for u in urls)
+
+
+def test_stopwords_and_short_tokens_dont_bury_the_relevant_result():
+    """Regression test: "What's ... ?" used to tokenize into a stray
+    single-letter "s" (from the split apostrophe) plus unfiltered function
+    words ("what", "the", "and", "between"), which skewed BM25 towards
+    short, unrelated chunks that happened to repeat "s" a lot (e.g. a
+    Memgraph integration page) instead of the actually relevant migration
+    guide. See langgraph_helper/retrievers/offline.py::_tokenize.
+    """
+    results = offline.search(
+        "What's the difference between StateGraph and MessageGraph?", k=5
+    )
+    urls = [c["url"] for c in results]
+    assert any("migrate/langgraph-v1" in u for u in urls)
