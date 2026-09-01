@@ -1,0 +1,21 @@
+# Core orchestration (LangChain v1 / LangGraph v1)
+langchain>=1.3,<2.0
+langgraph>=1.2,<2.0
+
+# LLM providers (pick the one you use; Gemini is the default)
+langchain-google-genai>=4.4,<5.0   # Google Gemini (free tier)
+langchain-openai>=1.0,<2.0         # OpenRouter (OpenAI-compatible API) fallback
+langchain-ollama>=1.0,<2.0         # Local Ollama fallback
+
+# Offline retrieval (pure-python, no compiled/ML deps -> installs fast everywhere)
+rank-bm25>=0.2.2,<0.3
+
+# Online retrieval
+ddgs>=9.0,<10.0                    # DuckDuckGo Search, free, no API key required
+tavily-python>=0.5,<1.0            # Optional: used automatically if TAVILY_API_KEY is set
+
+python-dotenv>=1.0,<2.0
+requests>=2.32,<3.0
+
+# Dev / testing
+pytest>=8.0,<9.0
