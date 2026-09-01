@@ -38,6 +38,8 @@ def get_llm(provider: str | None = None, temperature: float = 0.1) -> BaseChatMo
             model=settings.gemini_model,
             google_api_key=settings.google_api_key,
             temperature=temperature,
+            timeout=settings.llm_timeout_seconds,
+            max_retries=settings.llm_max_retries,
         )
 
     if provider == "openrouter":
@@ -53,6 +55,8 @@ def get_llm(provider: str | None = None, temperature: float = 0.1) -> BaseChatMo
             api_key=settings.openrouter_api_key,
             base_url="https://openrouter.ai/api/v1",
             temperature=temperature,
+            timeout=settings.llm_timeout_seconds,
+            max_retries=settings.llm_max_retries,
         )
 
     if provider == "ollama":

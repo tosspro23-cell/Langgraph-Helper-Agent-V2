@@ -43,8 +43,13 @@ def run_once(question: str, mode: str, verbose: bool) -> None:
     graph = get_compiled_graph()
     try:
         result = graph.invoke({"question": question, "mode": mode})
-    except RuntimeError as e:
-        print(f"[error] {e}", file=sys.stderr)
+    except Exception as e:
+        print(f"[error] LLM call failed: {e}", file=sys.stderr)
+        print(
+            "[hint] If this is a timeout, the API may be under heavy load -- try again, "
+            "or increase LLM_TIMEOUT_SECONDS in .env.",
+            file=sys.stderr,
+        )
         return
 
     if result.get("retrieval_warning"):

@@ -40,6 +40,11 @@ class Settings:
 
     retrieval_k: int = int(os.getenv("RETRIEVAL_K", "5"))
 
+    # Without an explicit timeout, a stalled connection to the LLM API hangs
+    # forever instead of failing. Cap it so the CLI always terminates.
+    llm_timeout_seconds: float = float(os.getenv("LLM_TIMEOUT_SECONDS", "45"))
+    llm_max_retries: int = int(os.getenv("LLM_MAX_RETRIES", "2"))
+
     def validate_mode(self, mode: str) -> str:
         mode = (mode or self.mode).lower()
         if mode not in ("offline", "online"):
