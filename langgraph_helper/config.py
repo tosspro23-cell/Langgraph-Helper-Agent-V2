@@ -7,13 +7,23 @@ from a .env file if present) or by CLI flags in main.py.
 
 from __future__ import annotations
 
+import logging
 import os
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Silence two cosmetic, harmless messages from the google-genai stack:
+# 1. UserWarning when a model ignores our `temperature` (some Gemini models
+#    use fixed sampling and can't be tuned) -- informational only.
+# 2. A logged suggestion to use the Chat API instead of one-shot
+#    generate_content calls -- doesn't apply to how LangChain drives it.
+warnings.filterwarnings("ignore", message=".*uses fixed sampling defaults.*")
+logging.getLogger("google_genai.models").setLevel(logging.ERROR)
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "data"
